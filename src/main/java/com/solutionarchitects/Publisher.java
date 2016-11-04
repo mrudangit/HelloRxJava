@@ -13,10 +13,6 @@ import rx.subjects.PublishSubject;
 import javax.annotation.PostConstruct;
 import java.util.concurrent.locks.LockSupport;
 
-/**
- * Created by montu on 8/26/16.
- */
-
 
 
 @Service
@@ -26,7 +22,7 @@ public class Publisher {
     private static Logger logger = LoggerFactory.getLogger(Publisher.class.getName());
 
 
-    public PublishSubject<Long> subject= PublishSubject.create();
+    PublishSubject<Long> subject= PublishSubject.create();
 
 
 
@@ -51,7 +47,7 @@ public class Publisher {
                 subject.onNext(nanoTime);
 
                 try {
-                    Thread.sleep(11);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -59,18 +55,18 @@ public class Publisher {
 
                 counter++;
 
+//
+//                if( counter == 11){
+//                    try {
+//                        logger.info("Sleeping ");
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
 
-                if( counter == 11){
-                    try {
-                        logger.info("Sleeping ");
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
 
-
-                if( counter > 100){
+                if( counter > 10){
                     flag=false;
                 }
 

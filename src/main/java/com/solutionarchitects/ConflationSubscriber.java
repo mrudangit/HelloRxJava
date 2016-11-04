@@ -11,9 +11,6 @@ import javax.annotation.PostConstruct;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * Created by montu on 11/3/16.
- */
 
 
 @Service
@@ -21,43 +18,42 @@ public class ConflationSubscriber {
 
     private static Logger logger = LoggerFactory.getLogger(ConflationSubscriber.class.getName());
 
-    @Autowired
+    private final
     Publisher publiser;
 
 
-    ExecutorService executorService = Executors.newFixedThreadPool(1);
+    private ExecutorService executorService = Executors.newFixedThreadPool(10);
 
+    @Autowired
+    public ConflationSubscriber(Publisher publiser) {
+        this.publiser = publiser;
+    }
 
 
     @PostConstruct
     protected void Init() {
 
 
-        Observable<Long> longObservable = Conflation.create(publiser.subject, 100, Schedulers.from(executorService));
-
-
-        longObservable.subscribe(aLong -> {
-
-
-            long currTime = System.nanoTime();
-
-            long l = (currTime - aLong)/1000;
-            logger.info("Conflation 1 Sub Value = {} Diff = {}", aLong,l);
-
-        });
+        Observable<Long> longObservable = Conflation.create(publiser.subject, 500, Schedulers.from(executorService));
 
 
 
 
-        longObservable.subscribe(aLong -> {
 
 
-            long currTime = System.nanoTime();
+        for ( int i = 0;i< 10;i++ ){
 
-            long l = (currTime - aLong)/1000;
-            logger.info("Conflation 2 Sub Value = {} Diff = {}", aLong,l);
+            int finalI = i;
+            longObservable.subscribe(aLong -> {
 
-        });
+
+                long currTime = System.nanoTime();
+
+                long l = (currTime - aLong)/1000;
+                logger.info("Conflation#{} Sub Value = {} Diff = {}", finalI, aLong,l);
+
+            });
+        }
 
 
     }

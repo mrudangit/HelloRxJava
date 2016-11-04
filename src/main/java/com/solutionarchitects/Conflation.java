@@ -3,25 +3,20 @@ package com.solutionarchitects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rx.*;
 import rx.Observable;
-import rx.Subscriber;
-import rx.plugins.RxJavaHooks;
-import rx.subjects.Subject;
+import rx.Scheduler;
+import rx.Subscription;
 
-import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by montu on 11/3/16.
- */
-public class Conflation {
+
+class Conflation {
 
 
     private static Logger logger = LoggerFactory.getLogger(ConflationSubscriber.class.getName());
 
 
-    public static <T> Observable<T> create(Observable<T> source, long timeout, Scheduler scheduler)
+    static <T> Observable<T> create(Observable<T> source, long timeout, Scheduler scheduler)
     {
 
         logger.info("Creating Conflation TimeOut : {}", timeout);
@@ -59,7 +54,7 @@ public class Conflation {
 
                     scheduled[0] = scheduler.createWorker().schedule(() -> {
 
-                        logger.info("Conflating...");
+
                         subscriber.onNext(t);
 
                         synchronized (lock) {
