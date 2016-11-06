@@ -66,7 +66,7 @@ public class Publisher {
 //                }
 
 
-                if( counter > 10){
+                if( counter > 1000){
                     flag=false;
                 }
 

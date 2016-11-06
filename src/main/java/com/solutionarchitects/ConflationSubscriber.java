@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 
 
 
-@Service
+// @Service
 public class ConflationSubscriber {
 
     private static Logger logger = LoggerFactory.getLogger(ConflationSubscriber.class.getName());
@@ -22,7 +22,7 @@ public class ConflationSubscriber {
     Publisher publiser;
 
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(10);
+    private ExecutorService executorService = Executors.newFixedThreadPool(5);
 
     @Autowired
     public ConflationSubscriber(Publisher publiser) {
@@ -41,7 +41,7 @@ public class ConflationSubscriber {
 
 
 
-        for ( int i = 0;i< 10;i++ ){
+        for ( int i = 0;i< 5;i++ ){
 
             int finalI = i;
             longObservable.subscribe(aLong -> {

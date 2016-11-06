@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  * Created by montu on 8/26/16.
  */
 
-//@Service
+@Service
 public class Subscriber
 {
 
@@ -40,17 +40,16 @@ public class Subscriber
     protected void Init(){
 
 
-        Observable<Timestamped<Long>> stringObservable = publiser.subject.onBackpressureDrop().timestamp().observeOn(Schedulers.from(executorService));
+        Observable<Long> debounce = publiser.subject.debounce(100, TimeUnit.MILLISECONDS, Schedulers.from(executorService));
 
 
-
-        for( int i=0;i<100;i++){
+        for( int i=0;i<1;i++){
             int finalI = i;
-            stringObservable.subscribe(s -> {
+            debounce.subscribe(s -> {
 
                 long currTime = System.nanoTime();
 
-                long l = (currTime - s.getValue())/1000;
+                long l = (currTime - s)/1000;
                 logger.info("Subscriber {} Value = {} Diff = {}", finalI, s,l);
 
             });
