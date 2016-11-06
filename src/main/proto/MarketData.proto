@@ -1,0 +1,44 @@
+syntax = "proto3";
+package com.solutionarchitects;
+
+
+
+message Level{
+	double price=1;
+	int32 askSize=2;
+	int32 bidSize=3;
+}
+
+message MarketDataMessage {
+
+	repeated Level PriceLevels=1;	
+	int32 ask0=2;
+	int32 ask1=3;
+	int32 ask2=4;
+	int32 ask3=5;
+	int32 ask4=6;
+
+	int32 bid0=7;
+	int32 bid1=8;
+	int32 bid2=9;
+	int32 bid3=11;
+	int32 bid4=12;
+
+	int32 askSize0=13;
+	int32 askSize1=14;
+	int32 askSize2=15;
+	int32 askSize3=16;
+	int32 askSize4=17;
+
+	int32 bidSize0=18;
+	int32 bidSize1=19;
+	int32 bidSize2=20;
+	int32 bidSize3=21;
+	int32 bidSize4=22;
+
+	string recordId=23;
+	string exchange=24;
+	
+	
+}
+
