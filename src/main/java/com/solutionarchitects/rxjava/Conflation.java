@@ -1,11 +1,14 @@
-package com.solutionarchitects;
+package com.solutionarchitects.rxjava;
 
 
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.disposables.Disposable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rx.Observable;
-import rx.Scheduler;
-import rx.Subscription;
+//import rx.Observable;
+//import rx.Scheduler;
+//import rx.Subscription;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +25,8 @@ class Conflation {
 
             final long[] lastUpdateTime = {0};
             final Object lock = new Object();
-            final Subscription[] scheduled = new Subscription[1];
+            final Disposable[] scheduled = new Disposable[1];
+            final long[] scheduleInterval = {timeout};
 
             source.observeOn(scheduler).subscribe(t -> {
 
@@ -31,10 +35,11 @@ class Conflation {
 
                 synchronized (lock) {
 
-                    scheduleRequired = currentUpdateTime - lastUpdateTime[0] < timeout;
+                    scheduleInterval[0] = currentUpdateTime - lastUpdateTime[0];
+                    scheduleRequired = scheduleInterval[0] < timeout;
 
                     if (scheduleRequired && scheduled[0] != null) {
-                        scheduled[0].unsubscribe();
+                        scheduled[0].dispose();
                         scheduled[0] = null;
                     }
 
@@ -51,7 +56,7 @@ class Conflation {
                             scheduled[0] = null;
                         }
 
-                    }, timeout, TimeUnit.MILLISECONDS);
+                    }, (timeout-scheduleInterval[0]), TimeUnit.MILLISECONDS);
 
                 } else {
 

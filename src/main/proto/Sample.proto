@@ -1,0 +1,7 @@
+syntax = "proto3";
+package com.solutionarchitects;
+
+
+message AskPrices {
+    repeated double askPrices=1 [packed=false];
+}

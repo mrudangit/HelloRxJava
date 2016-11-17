@@ -1,4 +1,4 @@
-package com.solutionarchitects;
+package com.solutionarchitects.protobuf;
 
 /**
  * Created by montu on 11/4/16.

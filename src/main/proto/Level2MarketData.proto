@@ -1,0 +1,20 @@
+syntax = "proto3";
+package com.solutionarchitects;
+
+
+message Level2MarketData {
+
+
+
+    repeated double AskPrices=1 [packed=false];
+    repeated double BidPrices=2 [packed=false];
+    repeated int32 AskSizes=3 [packed=false];
+    repeated int32 BidSizes=4 [packed=false];
+
+    string recordId=5;
+    string exchange=6;
+    string symbol=7;
+
+
+}
+

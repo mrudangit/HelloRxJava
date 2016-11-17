@@ -2,6 +2,9 @@ syntax = "proto3";
 package com.solutionarchitects;
 
 
+message Price{
+	double price=1;
+}
 
 message Level{
 	double price=1;
@@ -9,20 +12,25 @@ message Level{
 	int32 bidSize=3;
 }
 
+message PriceLevel {
+	double price=1;
+	int32 size=2;
+}
+
 message MarketDataMessage {
 
-	repeated Level PriceLevels=1;	
-	int32 ask0=2;
-	int32 ask1=3;
-	int32 ask2=4;
-	int32 ask3=5;
-	int32 ask4=6;
+	repeated Level PriceLevels=1;
+	double ask0=2;
+	double ask1=3;
+	double ask2=4;
+	double ask3=5;
+	double ask4=6;
 
-	int32 bid0=7;
-	int32 bid1=8;
-	int32 bid2=9;
-	int32 bid3=11;
-	int32 bid4=12;
+	double bid0=7;
+	double bid1=8;
+	double bid2=9;
+	double bid3=11;
+	double bid4=12;
 
 	int32 askSize0=13;
 	int32 askSize1=14;
@@ -38,7 +46,20 @@ message MarketDataMessage {
 
 	string recordId=23;
 	string exchange=24;
+	string symbol=25;
+
+	repeated double askPrices=26 [packed=false];
+
 	
 	
+}
+
+
+message NewMarketDataMessage {
+	repeated PriceLevel AskLevels=1;
+	repeated PriceLevel BidLevels=2;
+	string recordId=23;
+	string exchange=24;
+	string symbol=25;
 }
 

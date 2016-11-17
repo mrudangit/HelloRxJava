@@ -1,35 +1,42 @@
-package com.solutionarchitects;
+package com.solutionarchitects.reactor;
 
-
-//import io.reactivex.subjects.PublishSubject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.target.ThreadLocalTargetSource;
 import org.springframework.stereotype.Service;
-import rx.Observable;
-import rx.subjects.PublishSubject;
-
+import reactor.core.publisher.EmitterProcessor;
+import reactor.core.scheduler.Schedulers;
 
 import javax.annotation.PostConstruct;
-import java.util.concurrent.locks.LockSupport;
+
+/**
+ * Created by montu on 11/12/16.
+ */
+
+//@Service
+public class ReactorPublisher {
+
+
+    private static Logger logger = LoggerFactory.getLogger(ReactorPublisher.class.getName());
+    public final EmitterProcessor<Long> topic;
+
+    public ReactorPublisher(){
 
 
 
-@Service
-public class Publisher {
+        topic = EmitterProcessor.<Long>create().connect();
+
+        int availableProcessors = Runtime.getRuntime()
+                .availableProcessors();
+
+        logger.info("Number of Processors : {} ",availableProcessors);
 
 
-    private static Logger logger = LoggerFactory.getLogger(Publisher.class.getName());
-
-
-    PublishSubject<Long> subject= PublishSubject.create();
-
+    }
 
 
 
     @PostConstruct
     protected void Init(){
-
 
 
         Thread t = new Thread(() -> {
@@ -41,10 +48,8 @@ public class Publisher {
 
 
                 Long nanoTime = System.nanoTime();
-                logger.info("Publisher : {} ", nanoTime);
-
-
-                subject.onNext(nanoTime);
+                logger.info("Reactor Publisher : {} ", nanoTime);
+                topic.onNext(nanoTime);
 
                 try {
                     Thread.sleep(100);
@@ -78,14 +83,8 @@ public class Publisher {
 
         });
 
-        t.setName("Publisher");
-
 
         t.start();
 
     }
-
-
-
-
 }

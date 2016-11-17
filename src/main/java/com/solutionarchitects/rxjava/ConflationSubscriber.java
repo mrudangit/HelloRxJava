@@ -1,11 +1,13 @@
-package com.solutionarchitects;
+package com.solutionarchitects.rxjava;
 
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rx.Observable;
-import rx.schedulers.Schedulers;
+//import rx.Observable;
+//import rx.schedulers.Schedulers;
 
 import javax.annotation.PostConstruct;
 import java.util.concurrent.ExecutorService;
@@ -13,7 +15,7 @@ import java.util.concurrent.Executors;
 
 
 
-// @Service
+@Service
 public class ConflationSubscriber {
 
     private static Logger logger = LoggerFactory.getLogger(ConflationSubscriber.class.getName());
@@ -22,7 +24,7 @@ public class ConflationSubscriber {
     Publisher publiser;
 
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(5);
+    private ExecutorService executorService = Executors.newCachedThreadPool();
 
     @Autowired
     public ConflationSubscriber(Publisher publiser) {
@@ -41,7 +43,7 @@ public class ConflationSubscriber {
 
 
 
-        for ( int i = 0;i< 5;i++ ){
+        for ( int i = 0;i< 4;i++ ){
 
             int finalI = i;
             longObservable.subscribe(aLong -> {
@@ -49,8 +51,8 @@ public class ConflationSubscriber {
 
                 long currTime = System.nanoTime();
 
-                long l = (currTime - aLong)/1000;
-                logger.info("Conflation#{} Sub Value = {} Diff = {}", finalI, aLong,l);
+               long l = (currTime - aLong)/1000000;
+               logger.info("Conflation#{} Sub Value = {} Diff = {}ms", finalI, aLong,l);
 
             });
         }
