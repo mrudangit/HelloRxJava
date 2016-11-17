@@ -73,7 +73,7 @@ public class Publisher {
                 counter++;
 
 
-                if( counter == 11){
+                if( counter == 51){
                     try {
                         logger.info("Sleeping ");
                         Thread.sleep(1000);
@@ -83,7 +83,7 @@ public class Publisher {
                 }
 
 
-                if( counter > 20){
+                if( counter > 100){
                     flag=false;
                 }
 

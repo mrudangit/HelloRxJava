@@ -24,7 +24,7 @@ public class ConflationSubscriber {
     Publisher publiser;
 
 
-    private ExecutorService executorService = Executors.newCachedThreadPool();
+    private ExecutorService executorService = Executors.newFixedThreadPool(20);
 
     @Autowired
     public ConflationSubscriber(Publisher publiser) {
@@ -43,7 +43,7 @@ public class ConflationSubscriber {
 
 
 
-        for ( int i = 0;i< 4;i++ ){
+        for ( int i = 0;i< 10;i++ ){
 
             int finalI = i;
             longObservable.subscribe(aLong -> {
@@ -51,8 +51,8 @@ public class ConflationSubscriber {
 
                 long currTime = System.nanoTime();
 
-               long l = (currTime - aLong)/1000000;
-               logger.info("Conflation#{} Sub Value = {} Diff = {}ms", finalI, aLong,l);
+               long l = (currTime - aLong)/1000;
+               logger.info("Conflation#{} Sub Value = {} Diff = {} microSecs", finalI, aLong,l);
 
             });
         }

@@ -45,26 +45,31 @@ class Conflation {
 
                 }
 
-                if (scheduleRequired) {
+                    if (scheduleRequired) {
 
-                    scheduled[0] = scheduler.createWorker().schedule(() -> {
+                        //synchronized (lock) {
+                            scheduled[0] = scheduler.createWorker().schedule(() -> {
+
+                                subscriber.onNext(t);
+
+                                synchronized (lock) {
+                                    lastUpdateTime[0] = System.currentTimeMillis();
+                                    scheduled[0] = null;
+                                }
+
+                            }, (timeout - scheduleInterval[0]), TimeUnit.MILLISECONDS);
+                       // }
+
+                    } else {
+
 
                         subscriber.onNext(t);
 
                         synchronized (lock) {
                             lastUpdateTime[0] = System.currentTimeMillis();
-                            scheduled[0] = null;
                         }
-
-                    }, (timeout-scheduleInterval[0]), TimeUnit.MILLISECONDS);
-
-                } else {
-
-                    subscriber.onNext(t);
-                    synchronized (lock) {
-                        lastUpdateTime[0] = System.currentTimeMillis();
                     }
-                }
+
 
             });
         });
